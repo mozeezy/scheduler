@@ -50,7 +50,7 @@ export default function Application(props) {
   useEffect(() => {
     axios.get('/api/days')
     .then((response) => setDays(response.data))
-    .catch((err) => {console.log(err)})
+    .catch((error) => {console.log(error)})
   },[])
   return (
     <main className="layout">
