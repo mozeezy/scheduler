@@ -3,14 +3,14 @@ import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import "components/Application.scss";
-import { getAppointmentsForDay } from "helpers/selectors";
-
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
     appointments: {},
+    interviewers: {},
   });
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
@@ -35,7 +35,6 @@ export default function Application(props) {
         }));
       })
       .catch((er) => console.log("error", er));
-
   }, []);
   return (
     <main className="layout">
@@ -56,8 +55,16 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {dailyAppointments.map((appointment) => {
-          return <Appointment key={appointment.id} {...appointment} />;
+        {dailyAppointments.map((appt) => {
+          const interview = getInterview(state, appt.interview);
+          return (
+            <Appointment
+              key={appt.id}
+              id={appt.id}
+              time={appt.time}
+              interview={interview}
+            />
+          );
         })}
         <Appointment key="last" time="5pm" />
       </section>
