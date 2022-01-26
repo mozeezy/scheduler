@@ -17,40 +17,63 @@ export default function Application(props) {
     interviewers: [],
   });
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  
 
   const setDay = (day) => setState({ ...state, day });
   const setDays = (days) => {
     setState((prev) => ({ ...prev, days }));
   };
 
-  function bookInterview(id, interview) {
-    console.log(id, interview);
+  function bookInterview(appointmentId, interview) {
+    console.log(appointmentId, interview);
     const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
+      ...state.appointments[appointmentId],
+      interview: { ...interview },
     };
     const appointments = {
       ...state.appointments,
-      [id]: appointment
+      [appointmentId]: appointment,
     };
     setState({
       ...state,
-      appointments
+      appointments,
     });
 
-    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      setState({
-        ...state,
-        appointments,
-      });
-    });
+    return axios
+      .put(`/api/appointments/${appointmentId}`, { interview })
+      .then(() => {
+        setState({
+          ...state,
+          appointments,
+        });
+      })
+      .catch((err) => console.log("error", err));
   }
+
+  const cancelInterview = (appointmentId) => {
+    const appointment = {
+      ...state.appointments[appointmentId],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [appointmentId]: appointment,
+    };
+
+    return axios
+      .delete(`/api/appointments/${appointmentId}`)
+      .then(() =>
+        setState({
+          ...state,
+          appointments,
+        })
+      )
+      .catch((err) => console.log("error", err));
+  };
 
   const schedule = dailyAppointments.map((appt) => {
     const interview = getInterview(state, appt.interview);
     const dailyInterviewers = getInterviewersForDay(state, state.day);
-    
+
     return (
       <Appointment
         key={appt.id}
@@ -59,9 +82,10 @@ export default function Application(props) {
         interview={interview}
         interviewers={dailyInterviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
-  })
+  });
 
   useEffect(() => {
     Promise.all([
@@ -78,7 +102,7 @@ export default function Application(props) {
           interviewers: all[2].data,
         }));
       })
-      .catch((er) => console.log("error", er));
+      .catch((err) => console.log("error", err));
   }, []);
   return (
     <main className="layout">
@@ -100,7 +124,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {schedule}
-        <Appointment key="last" time="5pm" />
+        <Appointment key="last" time="5pm" cancelInterview={cancelInterview} />
       </section>
     </main>
   );
