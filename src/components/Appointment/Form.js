@@ -13,6 +13,7 @@ function Form(props) {
       return;
     }
   
+    setError("");
     props.onSave(name, interviewer);
   }
 
@@ -26,9 +27,7 @@ function Form(props) {
     props.onCancel();
   };
 
-  // React.useEffect(() => {
-  //   console.log(" ========>", { interviewer, student });
-  // }, [interviewer, student]);
+
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
