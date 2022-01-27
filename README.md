@@ -1,5 +1,10 @@
 # Interview Scheduler
 
+> Booking inteviews made easier!
+
+## Description
+With the state-of-the-art cutting-edge technology, Interview Scheduler allows you to easily book, edit, and delete appointments.
+
 ## Setup
 
 Install dependencies with `npm install`.
@@ -21,3 +26,10 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Dependencies
+
+- Axios
+- ClassNames
+- Cypress
+- React
