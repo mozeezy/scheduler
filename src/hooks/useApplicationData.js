@@ -28,7 +28,6 @@ const useApplicationData = function () {
           appointments,
           days: state.days.map((day) => updateSpots(appointments, day)),
         });
-        updateSpots(appointments, appointment);
       });
   }
 
