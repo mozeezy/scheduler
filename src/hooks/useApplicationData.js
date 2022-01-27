@@ -26,7 +26,9 @@ const useApplicationData = function () {
         setState({
           ...state,
           appointments,
+          days: state.days.map((day) => updateSpots(appointments, day)),
         });
+        updateSpots(appointments, appointment);
       });
   }
 
@@ -40,12 +42,19 @@ const useApplicationData = function () {
       [appointmentId]: appointment,
     };
 
-    return axios.delete(`/api/appointments/${appointmentId}`).then(() =>
+    return axios.delete(`/api/appointments/${appointmentId}`).then(() => {
       setState({
         ...state,
         appointments,
-      })
-    );
+        days: state.days.map((day) => updateSpots(appointments, day)),
+      });
+    });
+  };
+
+  const updateSpots = function (appointments, day) {
+    const remainingSpots = day.appointments.length - day.appointments.map((appointmentId) => appointments[appointmentId].interview).filter((appointment) => appointment).length;
+    day.spots = remainingSpots;
+    return day;
   };
 
   const setDay = (day) => setState({ ...state, day });
@@ -67,7 +76,7 @@ const useApplicationData = function () {
       })
       .catch((err) => console.log("error", err));
   }, []);
-  return {state, bookInterview, cancelInterview, setDay}
+  return { state, bookInterview, cancelInterview, setDay };
 };
 
 export default useApplicationData;
