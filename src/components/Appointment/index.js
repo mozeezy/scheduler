@@ -36,7 +36,6 @@ function Appointment(props) {
       .bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch((error) => {
-        console.log(error)
         transition(ERROR_SAVE, true)
       });
   }
@@ -49,7 +48,6 @@ function Appointment(props) {
       .catch((error) => transition(ERROR_DELETE, true));
   }
 
-  console.log(mode);
 
   return (
     <article className="appointment">

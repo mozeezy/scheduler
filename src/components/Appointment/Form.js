@@ -12,7 +12,11 @@ function Form(props) {
       setError("Student name cannot be blank");
       return;
     }
-  
+    if (interviewer === null) {
+      setError("You haven't selected an interviewer. Please choose one!")
+      return;
+    }
+
     setError("");
     props.onSave(name, interviewer);
   }
@@ -26,7 +30,6 @@ function Form(props) {
     reset();
     props.onCancel();
   };
-
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -59,10 +62,7 @@ function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button
-            confirm
-            onClick={() => validate(student)}
-          >
+          <Button confirm onClick={() => validate(student)}>
             Save
           </Button>
         </section>

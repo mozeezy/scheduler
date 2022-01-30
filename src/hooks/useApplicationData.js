@@ -65,7 +65,6 @@ const useApplicationData = function () {
       axios.get("/api/interviewers"),
     ])
       .then((all) => {
-        console.log(all);
         setState((prev) => ({
           ...prev,
           days: all[0].data,
